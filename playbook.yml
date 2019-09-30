@@ -1,0 +1,25 @@
+# https://netslovers.com/2018/04/07/how-to-centos-mitmproxy-installation-and-configuration/
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: install epel
+      yum:
+        name: epel-release
+        state: latest
+
+    - name: Download Nessus
+      get_url:
+        source: "https://www.tenable.com/downloads/api/v1/public/pages/nessus/downloads/10005/download?i_agree_to_tenable_license_agreement=true"
+        dest: "Nessus-8.7.1-es7.x86_64.rpm"
+
+    - name: Install Nessus
+      yum:
+        name: Nessus-8.7.1-es7.x86_64.rpm
+        state: present
+
+    - name: Start service
+      service:
+        name: nessusd
+        state: started
+        enabled: yes
